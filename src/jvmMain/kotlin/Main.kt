@@ -1,31 +1,39 @@
-import androidx.compose.material.MaterialTheme
-import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.application
+package data
+import data.model.Item
+import data.model.Items
+import data.model.Invoice
+import java.util.*
 
-@Composable
-@Preview
-fun App() {
-    var text by remember { mutableStateOf("Hello, World!") }
 
-    MaterialTheme {
-        Button(onClick = {
-            text = "Hello, Desktop!"
-        }) {
-            Text(text)
-        }
-    }
-}
+fun main() {
+    var item1 = Item("krompir", 4.3, 1,2)
+    var item2 = Item("spageti", 7.00, 5,2)
+    var item3 = Item("sir", 1.99, 2,2)
+    var item4 = Item("meso", 12.00, 5,2)
 
-fun main() = application {
-    Window(onCloseRequest = ::exitApplication) {
-        App()
-    }
+    var items = Items(mutableListOf(item1, item2, item3, item4))
+    val currentDate = Date()
+
+    var invoice = Invoice(currentDate, items)
+    //dodaj item
+    invoice.items.addItem(Item("kafa", 2.99, 1,2))
+    invoice.items.addItem(Item("kafa", 2.99, 1,2))
+    invoice.items.addItem(Item("kafa", 2.99, 1,2))
+
+    //odstrani item
+    invoice.items.deleteItem(Item("kafa", 2.99, 1,2))
+    //posodobii item
+    invoice.items.updateItem( 0, Item("puding", 12.20, 1,2))
+    //izpiši račun
+    invoice.print();
+
+
+
+
+
+
+
+
+
+
 }

@@ -1,6 +1,6 @@
 # Principi programskih jezikov
 
-### Seminarske vaje
+### Vaja 1
 
 
-Ustvarjen **projekt** in *naložen* na oddaljen repozitorij na [GitHub](https://github.com/).
+Narejena 1 naloga in *naložena* na oddaljen repozitorij na [GitHub](https://github.com/).
