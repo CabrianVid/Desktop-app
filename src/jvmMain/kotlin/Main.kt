@@ -6,10 +6,25 @@ import java.util.*
 
 
 fun main() {
-    var item1 = Item("krompir", 4.3, 1,2)
-    var item2 = Item("spageti", 7.00, 5,2)
-    var item3 = Item("sir", 1.99, 2,2)
-    var item4 = Item("meso", 12.00, 5,2)
+    var item1 = Item("krompir", 4.3,2)
+    var item2 = Item("spageti", 7.00,2)
+    var item3 = Item("sir", 1.99,2)
+    var item4 = Item("meso", 12.00,2)
+
+    //create a new Items hashmap
+    val items = Items()
+    items.addItem(item1,1)
+    items.addItem(item2,1)
+    items.addItem(item3,1)
+    items.addItem(item4,1)
+    items.removeItem(item1,1)
+    //create a new invoice
+    val invoice = Invoice(Date(), items)
+    invoice.print();
+
+
+
+    /*
 
     var items = Items(mutableListOf(item1, item2, item3, item4))
     val currentDate = Date()
@@ -26,7 +41,7 @@ fun main() {
     invoice.items.updateItem( 0, Item("puding", 12.20, 1,2))
     //izpiši račun
     invoice.print();
-
+*/
 
 
 

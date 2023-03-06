@@ -1,8 +1,39 @@
 
+
 package data.model
 
 import java.util.*
 
+class Items : LinkedHashMap<Item, Int>() {
+
+    fun addItem(item: Item, quantity: Int) {
+        if (containsKey(item)) {
+            val newQuantity = this[item]!! + quantity
+            this[item] = newQuantity
+        } else {
+            this[item] = quantity
+        }
+    }
+
+    fun removeItem(item: Item, quantity: Int) {
+        if (!containsKey(item)) {
+            throw IllegalStateException("Item does not exist in the list")
+        } else if (this[item]!! < quantity) {
+            throw IllegalStateException("Cannot remove more than what is currently on the bill")
+        } else if (this[item] == quantity) {
+            remove(item)
+        } else {
+            val newQuantity = this[item]!! - quantity
+            this[item] = newQuantity
+        }
+    }
+
+}
+
+
+
+
+/*
 class Items(public val itemList: MutableList<Item>) {
 
     var created: Date = Date()
@@ -77,4 +108,4 @@ class Items(public val itemList: MutableList<Item>) {
         return totalPrice
     }
 
-}
+}*/
