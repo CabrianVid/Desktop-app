@@ -1,111 +1,52 @@
-
-
 package data.model
 
+import java.time.LocalDateTime
 import java.util.*
 
 class Items : LinkedHashMap<Item, Int>() {
 
-    fun addItem(item: Item, quantity: Int) {
-        if (containsKey(item)) {
-            val newQuantity = this[item]!! + quantity
-            this[item] = newQuantity
-        } else {
-            this[item] = quantity
-        }
-    }
+    var created: LocalDateTime = LocalDateTime.now()
+    var modified: LocalDateTime = created
 
-    fun removeItem(item: Item, quantity: Int) {
-        if (!containsKey(item)) {
+    fun getQuantity(item: Item): Int? {
+        return this[item]
+    }
+    override fun remove(item: Item): Int? {
+        if (getQuantity(item) == 1) {
+            val removed = super.remove(item)
+            modified = LocalDateTime.now()
+            return removed
+        } else if (getQuantity(item)!! > 1) {
+            val newQuantity = getQuantity(item)!! - 1
+            val put = super.put(item, newQuantity)
+            modified = LocalDateTime.now()
+            item.modified = LocalDateTime.now()
+            return put
+        } else {
             throw IllegalStateException("Item does not exist in the list")
-        } else if (this[item]!! < quantity) {
-            throw IllegalStateException("Cannot remove more than what is currently on the bill")
-        } else if (this[item] == quantity) {
-            remove(item)
-        } else {
-            val newQuantity = this[item]!! - quantity
-            this[item] = newQuantity
         }
     }
-
-}
-
-
-
-
-/*
-class Items(public val itemList: MutableList<Item>) {
-
-    var created: Date = Date()
-    var modified: Date = created
-
-
-    // dodajanje novih elementov
-    fun addItem(item: Item) {
-        var alreadyExists: Boolean = false
-
-        for(el in itemList){
-            if(item.name == el.name){
-                el.quantity+=item.quantity
-                alreadyExists = true;
-                //nastavimo da je bil spremenjen
-                item.modified = Date()
-                modified = Date()
-            }
-        }
-        if(alreadyExists == false){
-            itemList.add(item)
-            //nastavimo modified in created
-            item.created = Date()
+    override fun put(item: Item, quantity: Int): Int? {
+        if (containsKey(item)) {
+            val newQuantity = getQuantity(item)!! + quantity
+            val put = super.put(item, newQuantity)
+            modified = LocalDateTime.now()
+            return put
+        } else {
+            item.created = LocalDateTime.now()
             item.modified = item.created
             modified = item.created
-        }
-
-    }
-
-
-    // odstrani izdelek iz lista
-    fun deleteItem(item: Item) {
-
-        for(el in itemList){
-            if(item.name == el.name){
-                if(el.quantity>1){
-                    el.quantity--;
-                    //nastavimo da je spremenjen
-                    item.modified = Date()
-                    modified = Date()
-                }else{
-                    itemList.remove(el)
-                    //nastavimo da je bil spremenjen
-                    modified = Date()
-                }
-            }
-        }
-
-
-
-
-
-    }
-
-    // izdelek spremenimo glede na index
-    fun updateItem(itemIndex: Int, updatedItem: Item) {
-
-        if (itemIndex >= 0) {
-            itemList[itemIndex] = updatedItem
-
-            itemList[itemIndex].modified = Date()
-            modified = Date()
+            val put = super.put(item, quantity)
+            return put
         }
     }
-
-    //ceno celotnega lista
-    fun getTotalPrice(): Double {
-        var totalPrice = 0.0
-        for (item in itemList) {
-            totalPrice += item.price * item.quantity
+    fun updateItem(oldItem: Item, updatedItem: Item) {
+        if (containsKey(oldItem)) {
+            val quantity = getQuantity(updatedItem)!!
+            remove(oldItem)
+            put(updatedItem, quantity)
+            updatedItem.modified = LocalDateTime.now()
+            modified = LocalDateTime.now()
         }
-        return totalPrice
     }
-
-}*/
+}
