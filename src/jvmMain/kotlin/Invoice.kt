@@ -1,6 +1,5 @@
 package data.model
 
-import Issuer
 import Cashier
 import Company
 import Searchable
@@ -18,7 +17,7 @@ class Invoice(
     private var date: LocalDateTime,
     private var items: LinkedHashMap<Item, Int>,
 
-    private var issuer: Issuer,
+    private var issuer: Company,
     private var cashier: Cashier,
     private var customer: Company? = null, //pomeni da je lahko null in takrat ni firme
     private var id: UUID = UUID.randomUUID(),
@@ -64,18 +63,24 @@ class Invoice(
         println("Invoice #${id} - ${date}")
         println("Issuer name: ${issuer.name}")
         println("Issuer address: ${issuer.address}")
-        println("Issuer bank account: ${issuer.bankAccount}")
+        println("Issuer bank account: ${issuer.taxNumber}")
         println("Issuer email: ${issuer.email}")
         println("Issuer phone: ${issuer.phone}")
+        println("Issuer tax number: ${issuer.registrationNumber}")
         println("Issuer website: ${issuer.website}")
-
-        println("Customer name: ${customer?.name}")
-        println("Customer tax number: ${customer?.taxNumber}")
-        println("Customer bank account: ${customer?.registrationNumber}")
-        if (customer?.taxpayer == true) {
-            println("Customer tax payer: yes")
-        } else {
-            println("Customer tax payer: no")
+        if(customer != null) {
+            println("Customer name: ${customer?.name}")
+            println("Customer tax number: ${customer?.taxNumber}")
+            println("Customer bank account: ${customer?.registrationNumber}")
+            println("Customer address: ${customer?.address}")
+            println("Customer email: ${customer?.email}")
+            println("Customer phone: ${customer?.phone}")
+            println("Customer website: ${customer?.website}")
+            if (customer?.taxpayer == true) {
+                println("Customer tax payer: yes")
+            } else {
+                println("Customer tax payer: no")
+            }
         }
         println("Items:")
         for ((item, quantity) in items) {
@@ -102,26 +107,7 @@ class Invoice(
     }
 }
 
-fun LinkedHashMap<Item, Int>.getTotalPrice(): Double {
-    var totalPrice = 0.0
-    for ((item, quantity) in this) {
-        totalPrice += item.price * quantity
-    }
-    return totalPrice
-}
 
-fun LinkedHashMap<Item, Int>.getTax(): Double {
-    var tax = 0.0
-    //za vsak izdelek izračunamo davke
 
-    for ((item, quantity) in this) {
-        if (item.taxLevel == TaxLevel.A) {
-            tax += item.price / 22 * quantity
-        } else if (item.taxLevel == TaxLevel.B) {
-            tax += item.price / 9.5 * quantity
-        } else if (item.taxLevel == TaxLevel.C) {
-            tax += item.price / 5 * quantity
-        }
-    }
-    return tax
-}
+
+

@@ -27,7 +27,9 @@ class Items : LinkedHashMap<Item, Int>() {
         }
     }
     override fun put(item: Item, quantity: Int): Int? {
-        if (containsKey(item)) {
+        if(quantity < 1) throw IllegalArgumentException("Quantity must be greater than 0")
+        else{
+            if (containsKey(item)) {
             val newQuantity = getQuantity(item)!! + quantity
             val put = super.put(item, newQuantity)
             modified = LocalDateTime.now()
@@ -38,7 +40,8 @@ class Items : LinkedHashMap<Item, Int>() {
             modified = item.created
             val put = super.put(item, quantity)
             return put
-        }
+        }}
+
     }
     fun updateItem(oldItem: Item, updatedItem: Item) {
         if (containsKey(oldItem)) {
@@ -52,4 +55,29 @@ class Items : LinkedHashMap<Item, Int>() {
             throw IllegalStateException("Item does not exist in the list")
         }
     }
+
+
+}
+fun LinkedHashMap<Item, Int>.getTotalPrice(): Double {
+    var totalPrice = 0.0
+    for ((item, quantity) in this) {
+        totalPrice += item.price * quantity
+    }
+    return totalPrice
+}
+
+fun LinkedHashMap<Item, Int>.getTax(): Double {
+    var tax = 0.0
+    //za vsak izdelek izračunamo davke
+
+    for ((item, quantity) in this) {
+        if (item.taxLevel == TaxLevel.A) {
+            tax += item.price / 22 * quantity
+        } else if (item.taxLevel == TaxLevel.B) {
+            tax += item.price / 9.5 * quantity
+        } else if (item.taxLevel == TaxLevel.C) {
+            tax += item.price / 5 * quantity
+        }
+    }
+    return tax
 }
