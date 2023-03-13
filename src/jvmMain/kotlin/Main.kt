@@ -39,8 +39,14 @@ fun main() {
     items.remove(item3)
     items.updateItem(item3, item4)
     //create a new invoice
-    val invoice = Invoice(LocalDateTime.now(), items, issuer, customer, cashier)
+    val invoice = Invoice(LocalDateTime.now(), items, issuer, cashier)
 
     invoice.print()
-    invoice.print(invoice.search("anez"))
+    val findRE : Boolean = invoice.search("anez")
+    if(findRE){
+        println("true")
+    }else{
+        println("false")
+    }
+    //invoice.print(invoice.search("anez"))
 }

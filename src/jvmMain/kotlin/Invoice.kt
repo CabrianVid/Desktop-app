@@ -19,8 +19,8 @@ class Invoice(
     private var items: LinkedHashMap<Item, Int>,
 
     private var issuer: Issuer,
-    private var customer: Company?, //pomeni da je lahko null in takrat ni firme
     private var cashier: Cashier,
+    private var customer: Company? = null, //pomeni da je lahko null in takrat ni firme
     private var id: UUID = UUID.randomUUID(),
     private var code: UUID = UUID.randomUUID(),
     private var finalPrice: Double = items.getTotalPrice(),
@@ -70,48 +70,30 @@ class Invoice(
         println("Issuer website: ${issuer.website}")
 
         println("Customer name: ${customer?.name}")
-        println("Customer address: ${customer?.taxNumber}")
+        println("Customer tax number: ${customer?.taxNumber}")
         println("Customer bank account: ${customer?.registrationNumber}")
         if (customer?.taxpayer == true) {
-            println("Customer email: yes")
+            println("Customer tax payer: yes")
         } else {
-            println("Customer email: no")
+            println("Customer tax payer: no")
         }
-        if (customer?.taxpayer == true) {
 
-            println("Items:")
-            for ((item, quantity) in items) {
-                println(
-                    "- ${item.name}: ${item.price} x ${quantity} ......... ${
-                        String.format(
-                            "%.2f",
-                            item.price * quantity
-                        )
-                    }"
-                )
-            }
-            println("Final Price: ${String.format("%.2f", finalPrice)}")
-            println("Taxes: ${String.format("%.2f", getTax())}")
-            println("Neto price: ${String.format("%.2f", netoPrice)}")
 
-        } else {
-
-            println("Items:")
-            for ((item, quantity) in items) {
-                println(
-                    "- ${item.name}: ${item.price} x ${quantity} ......... ${
-                        String.format(
-                            "%.2f",
-                            item.price * quantity
-                        )
-                    }"
-                )
-            }
-            println("Final Price: ${String.format("%.2f", netoPrice)}")
-            println("Taxes: 0")
-            println("Neto price: ${String.format("%.2f", netoPrice)}")
-
+        println("Items:")
+        for ((item, quantity) in items) {
+            println(
+                "- ${item.name}: ${item.price} x ${quantity} ......... ${
+                    String.format(
+                        "%.2f",
+                        item.price * quantity
+                    )
+                }"
+            )
         }
+        println("Final Price: ${String.format("%.2f", finalPrice)}")
+        println("Taxes: ${String.format("%.2f", getTax())}")
+        println("Neto price: ${String.format("%.2f", netoPrice)}")
+
 
         println("Cashier name: ${cashier.name}")
         println("Cashier surname: ${cashier.surname}")
