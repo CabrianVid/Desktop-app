@@ -77,8 +77,6 @@ class Invoice(
         } else {
             println("Customer tax payer: no")
         }
-
-
         println("Items:")
         for ((item, quantity) in items) {
             println(

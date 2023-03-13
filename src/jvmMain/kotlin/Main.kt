@@ -10,7 +10,9 @@ import data.model.Invoice
 import data.model.TaxLevel
 import java.time.LocalDateTime
 import java.util.*
-
+// try and catch
+// Company in Issuer zdruzi
+// funkciji v Invoice prestavi v Items
 fun main() {
 
     //create Issuer
@@ -34,13 +36,11 @@ fun main() {
     items.put(item2, 1)
     items.put(item3, 3)
     items.put(item4, 1)
-
     items.remove(item1)
     items.remove(item3)
     items.updateItem(item3, item4)
     //create a new invoice
     val invoice = Invoice(LocalDateTime.now(), items, issuer, cashier)
-
     invoice.print()
     val findRE : Boolean = invoice.search("anez")
     if(findRE){

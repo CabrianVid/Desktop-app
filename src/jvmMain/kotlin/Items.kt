@@ -48,5 +48,8 @@ class Items : LinkedHashMap<Item, Int>() {
             updatedItem.modified = LocalDateTime.now()
             modified = LocalDateTime.now()
         }
+        else {
+            throw IllegalStateException("Item does not exist in the list")
+        }
     }
 }
