@@ -4,14 +4,7 @@ import Cashier
 import Company
 import Searchable
 import java.time.LocalDateTime
-import java.util.UUID
-import java.util.LinkedHashMap
-
-//
-//• issuer (izdajatelj),
-//• customer (stranka),
-//• cashier (blagajnik)
-
+import java.util.*
 
 class Invoice(
     private var date: LocalDateTime,
@@ -68,7 +61,7 @@ class Invoice(
         println("Issuer phone: ${issuer.phone}")
         println("Issuer tax number: ${issuer.registrationNumber}")
         println("Issuer website: ${issuer.website}")
-        if(customer != null) {
+        if (customer != null) {
             println("Customer name: ${customer?.name}")
             println("Customer tax number: ${customer?.taxNumber}")
             println("Customer bank account: ${customer?.registrationNumber}")
@@ -84,17 +77,28 @@ class Invoice(
         }
         println("Items:")
         for ((item, quantity) in items) {
-            println(
-                "- ${item.name}: ${item.price} x ${quantity} ......... ${
-                    String.format(
-                        "%.2f",
-                        item.price * quantity
-                    )
-                }"
-            )
+            if (item.weight != null) {
+                println(
+                    "- ${item.name} (${item.weight} kg): ${String.format("%.2f", item.price)} x ${quantity} ......... ${
+                        String.format(
+                            "%.2f",
+                            item.price * quantity
+                        )
+                    }"
+                )
+            } else {
+                println(
+                    "- ${item.name}: ${String.format("%.2f", item.price)} x ${quantity} ......... ${
+                        String.format(
+                            "%.2f",
+                            item.price * quantity
+                        )
+                    }"
+                )
+            }
         }
         println("Final Price: ${String.format("%.2f", finalPrice)}")
-        println("Taxes: ${String.format("%.2f", getTax())}")
+        println("Taxes: ${String.format("%.2f", items.getTax())}")
         println("Neto price: ${String.format("%.2f", netoPrice)}")
 
 

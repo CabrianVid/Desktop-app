@@ -1,5 +1,6 @@
 import kotlin.random.Random
 
+
 fun generateRandomCode(): String {
     val random = Random.Default
     val builder = StringBuilder(8)
@@ -17,4 +18,10 @@ class Cashier(
     override fun search(word: String): Boolean {
         return name.contains(word, true) || surname.contains(word, true) || idNumber.contains(word, true)
     }
+    fun specifyCode(numbers: String,food : InternalItem): String {
+
+        return idNumber
+    }
+
+
 }
