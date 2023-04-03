@@ -13,11 +13,14 @@ enum class IternalID(val value: String, val pricePerKilo: Double) {
     BAGETTE("4281", 1.99)
 }
 enum class FoodType(val value: String) {//department
-    FRUIT("211"),
+FRUIT("211"),
     VEGETABLE("233"),
     MEAT("242"),
     BREAD("276")
 }
+
+//ne podvajaj v InteralItem
+//ne sme bit v Item internal pa oni ID
 
 class InternalItem(
     val internalId: IternalID,
