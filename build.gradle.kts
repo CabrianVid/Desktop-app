@@ -1,8 +1,8 @@
-import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
     kotlin("multiplatform")
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.5.0"
     id("org.jetbrains.compose")
 }
 
@@ -24,6 +24,8 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(compose.desktop.currentOs)
+                implementation("mysql:mysql-connector-java:8.0.28")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
             }
         }
         val jvmTest by getting

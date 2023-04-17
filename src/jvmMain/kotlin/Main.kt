@@ -1,3 +1,4 @@
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -11,7 +12,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.WindowState
+import data.util.DataBaseUtil
+
 
 data class elements(val name: String, val icon: ImageVector)
 
@@ -26,8 +28,6 @@ val tabs = listOf(
         Icons.Rounded.Info
     )
 )
-
-
 @Composable
 fun Invoices() {
 
@@ -77,7 +77,7 @@ fun Footer(index: Int) {
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth().padding(12.dp),
-                text = "You are viewing the $currTab tab",
+                text = "You are viewing the \"$currTab\" tab",
                 textAlign = TextAlign.Center
             )
         }
@@ -88,7 +88,7 @@ fun Footer(index: Int) {
 fun NavigationBar() {
     var selectedTabIndex by remember { mutableStateOf(0) }
     Column(modifier = Modifier.fillMaxWidth()) {
-        TabRow(
+        TabRow( //row
             selectedTabIndex = selectedTabIndex,
             backgroundColor = Color.Cyan
         ) {
@@ -112,12 +112,13 @@ fun NavigationBar() {
 }
 
 fun main() {
-    androidx.compose.ui.window.singleWindowApplication(
-        title = "Compose Desktop",
-        state = WindowState(width = 800.dp, height = 600.dp)
-    ) {
-        NavigationBar()
-    }
+//    androidx.compose.ui.window.singleWindowApplication(
+//        title = "Compose Desktop",
+//        state = WindowState(width = 800.dp, height = 600.dp)
+//    ) {
+//        NavigationBar()
+//    }
+    DataBaseUtil.testConnection()
 }
 
 
