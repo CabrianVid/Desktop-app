@@ -1,8 +1,9 @@
-package data.model
+package model
 
-import Cashier
-import Company
-import Searchable
+import data.model.Item
+import data.model.TaxLevel
+import data.model.getTax
+import data.model.getTotalPrice
 import java.time.LocalDateTime
 import java.util.*
 
@@ -102,9 +103,9 @@ class Invoice(
         println("Neto price: ${String.format("%.2f", netoPrice)}")
 
 
-        println("Cashier name: ${cashier.name}")
-        println("Cashier surname: ${cashier.surname}")
-        println("Cashier email: ${cashier.idNumber}")
+        println("model.Cashier name: ${cashier.name}")
+        println("model.Cashier surname: ${cashier.surname}")
+        println("model.Cashier email: ${cashier.idNumber}")
 
         println("Invoice code: ${code}")
 

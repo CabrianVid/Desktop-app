@@ -1,3 +1,4 @@
 .idea/
 .gradle/
 build/
+src/jvmMain/kotlin/data/util/config.json

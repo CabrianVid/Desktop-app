@@ -12,7 +12,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import data.util.DataBaseUtil
+import data.dao.mysql.MySqlCashier
+import data.dao.mysql.MySqlInternalItem
+import data.dao.mysql.MySqlItem
+import data.model.Item
+import data.model.TaxLevel
+import model.Cashier
+import model.FoodType
+import model.InternalItem
+import model.IternalID
+import java.util.*
+
+//ERR model spremeni da ne bo skup v items item in internal item
+
 
 
 data class elements(val name: String, val icon: ImageVector)
@@ -118,8 +130,199 @@ fun main() {
 //    ) {
 //        NavigationBar()
 //    }
-    DataBaseUtil.testConnection()
-}
+//    DataBaseUtil.testConnection()
+
+    val mySqlItem = MySqlItem()
+
+// Insert
+    val newItem = Item(
+        name = "Apple",
+        taxLevel = TaxLevel.A,
+        price = 99.99,
+        internCode = "IC123",
+        itemId = "4",
+        weight = 1.0,
+        checkNumber = "1",
+        code = "1234567891231"
+    )
+    println(if (mySqlItem.insert(newItem)) "The item was inserted successfully." else "Failed to insert the item.")
+
+// Get by name and get all
+    val allItems = mySqlItem.getAll()
+    allItems.forEach { println("All items: ${it.name}") }
+    println("Item found: ${mySqlItem.getByName("Banana")?.name ?: "Item not found."}")
+
+// Update item
+    val itemToUpdate = mySqlItem.getByName("Banana")?.apply {
+        price = 199.99
+        taxLevel = TaxLevel.B
+    }
+    println(if (itemToUpdate != null && mySqlItem.update(itemToUpdate)) "The item was updated successfully." else "Failed to update the item.")
+
+// Get by barcode
+    val barcode = "1234567891231"
+    val itemByBarcode = mySqlItem.getByBarcode(barcode)
+    println(itemByBarcode?.let { "Item found: Name: ${it.name} Price: ${it.price} Tax Level: ${it.taxLevel}" } ?: "No item found with barcode: $barcode")
+
+// Get by id
+    val uuidSearch : UUID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000")
+    val itemById = mySqlItem.getById(uuidSearch)
+    println(itemById?.let { "Item found: Name: ${it.name} Price: ${it.price} Tax Level: ${it.taxLevel}" } ?: "No item found with id: $uuidSearch")
+
+// Delete item
+    val itemName = "Apple"
+    val itemToDelete = mySqlItem.getByName(itemName)
+    println(if (itemToDelete != null && mySqlItem.delete(itemToDelete)) "The item was deleted successfully." else "Failed to delete the item.")
+
+    //for Cashier
+    val mySqlCashier = MySqlCashier()
+
+    val newCashier = Cashier(
+        name = "John",
+        surname = "Doe"
+    )
+
+    val wasInserted = mySqlCashier.insert(newCashier)
+
+    if (wasInserted) {
+        println("The cashier was inserted successfully.")
+    } else {
+        println("Failed to insert the cashier.")
+    }
+
+    val mySqlCashier2 = MySqlCashier()
+    val cashier = mySqlCashier2.getByName("John")
+
+    if (cashier != null) {
+        println("Cashier found:")
+        println(cashier.name)
+    } else {
+        println("Cashier not found.")
+    }
+
+    val mySqlCashier3 = MySqlCashier()
+    val cashierToUpdate = mySqlCashier3.getByName("John")
+
+    if (cashierToUpdate != null) {
+        cashierToUpdate.surname = "Smith"
+
+        val wasUpdated = mySqlCashier3.update(cashierToUpdate)
+
+        if (wasUpdated) {
+            println("The cashier was updated successfully.")
+        } else {
+            println("Failed to update the cashier.")
+        }
+    } else {
+        println("Cashier not found.")
+    }
+
+    val mySqlCashier4 = MySqlCashier()
+    val cashierToDelete = mySqlCashier4.getByName("John")
+
+    if (cashierToDelete != null) {
+        val wasDeleted = mySqlCashier4.delete(cashierToDelete)
+
+        if (wasDeleted) {
+            println("The cashier was deleted successfully.")
+        } else {
+            println("Failed to delete the cashier.")
+        }
+    } else {
+        println("No cashier found with name: ${cashierToDelete?.name}")
+    }
+    //_______________Company
+    println("Company__________________________")
+//    val mySqlCompanyDao = MySqlCompany()
+//
+//    val newCompany = Company("Mercator", "123 X St.", "12345", "contact@companyx.com", "1234567890", "91820", "www.companyx.com", true)
+//    val insertSuccess = mySqlCompanyDao.insert(newCompany)
+//
+//    if (insertSuccess) {
+//        println("Company inserted successfully.")
+//    } else {
+//        println("Failed to insert company.")
+//        return
+//    }
+//
+//    val companyFromDb = mySqlCompanyDao.getByName("Mercator")
+//
+//    if (companyFromDb != null) {
+//        println("Retrieved company from database.")
+//        println("Company name: ${companyFromDb.name}")
+//        println("Company address: ${companyFromDb.address}")
+//        // ...
+//    } else {
+//        println("Failed to retrieve company from database.")
+//        return
+//    }
+//
+//    // Update the company
+//    companyFromDb.email = "newemail@companyx.com"
+//    val updateSuccess = mySqlCompanyDao.update(companyFromDb)
+//
+//    if (updateSuccess) {
+//        println("Company updated successfully.")
+//    } else {
+//        println("Failed to update company.")
+//        return
+//    }
+//
+//    // Get all companies
+//    val allCompanies = mySqlCompanyDao.getAll()
+//    if (allCompanies.isNotEmpty()) {
+//        println("Retrieved all companies from database.")
+//        allCompanies.forEach { company ->
+//            println("Company name: ${company.name}")
+//        }
+//    } else {
+//        println("No companies found in the database.")
+//    }
+//
+//    // Delete the company
+//    val deleteSuccess = mySqlCompanyDao.delete(companyFromDb)
+//    if (deleteSuccess) {
+//        println("Company deleted successfully.")
+//    } else {
+//        println("Failed to delete company.")
+//    }
+
+    //_______________________Internal item
+    println("InternalItem__________________________")
+
+        val mySqlInternalItemDao = MySqlInternalItem()
+
+        // Create a new InternalItem
+        val internalItem = InternalItem(
+            internalId = IternalID.CHICKEN,
+            department = FoodType.MEAT,
+            name = "Nuggets",
+            taxLevel = TaxLevel.A,
+            weight = 2.0,
+        )
+//    name = "Apple",
+//    taxLevel = TaxLevel.A,
+//    price = 99.99,
+//    internCode = "IC123",
+//    itemId = "4",
+//    weight = 1.0,
+//    checkNumber = "1",
+//    code = "1234567891231"
+
+        // Insert the InternalItem to the database
+        val insertStatus = mySqlInternalItemDao.insert(internalItem)
+        println("Insert operation status: $insertStatus")
+
+        // Fetch the InternalItem by name
+        val itemByName = mySqlInternalItemDao.getByName("Banana")
+        println("InternalItem fetched by name: ${itemByName?.name}")
+
+
+
+
+    }
+
+
 
 
 
@@ -207,7 +410,7 @@ fun main() {
 
 //    try {
 //        val issuer =
-//            Company(
+//            model.Company(
 //                "Mercator",
 //                "Dunajska cesta 107",
 //                "SI4588595",
@@ -217,8 +420,8 @@ fun main() {
 //                "www.mercator.si",
 //                true
 //            )
-//        val cashier = Cashier("Janez", "Novak")
-//        val customer = Company(
+//        val cashier = model.Cashier("Janez", "Novak")
+//        val customer = model.Company(
 //            "HENKEL MARIBOR d.o.o.",
 //            "Presernova 10",
 //            "SI6261752000",
@@ -233,11 +436,11 @@ fun main() {
 //        val item1 = Item("Coca Cola", TaxLevel.B, 890.12, "123", "4567")
 //        println("test")
 //        println(item1.code)
-//        val internalItem1 = InternalItem(IternalID.BANANA, FoodType.FRUIT, "Banana", TaxLevel.B, 3.20)
+//        val internalItem1 = model.InternalItem(model.IternalID.BANANA, model.FoodType.FRUIT, "Banana", TaxLevel.B, 3.20)
 //        println("test2")
-//        val interalItem2 = InternalItem(IternalID.PEAR, FoodType.FRUIT, "Apple", TaxLevel.B, 6.50)
-//        val internalItem3 = InternalItem(IternalID.TOMATO, FoodType.VEGETABLE, "Tomato", TaxLevel.B, 0.5)
-//        val internalItem4 = InternalItem(IternalID.BAGETTE, FoodType.BREAD, "Bagette", TaxLevel.B, 1.2)
+//        val interalItem2 = model.InternalItem(model.IternalID.PEAR, model.FoodType.FRUIT, "Apple", TaxLevel.B, 6.50)
+//        val internalItem3 = model.InternalItem(model.IternalID.TOMATO, model.FoodType.VEGETABLE, "Tomato", TaxLevel.B, 0.5)
+//        val internalItem4 = model.InternalItem(model.IternalID.BAGETTE, model.FoodType.BREAD, "Bagette", TaxLevel.B, 1.2)
 //        val items = Items()
 //        items.put(item1, 6)
 //        items.put(internalItem1, 23)

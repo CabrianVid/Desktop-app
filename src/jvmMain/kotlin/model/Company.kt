@@ -1,3 +1,5 @@
+package model
+
 class Company(
     var name: String,
     var address: String,        //Dunajska cesta 107

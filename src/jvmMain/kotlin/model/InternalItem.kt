@@ -1,4 +1,4 @@
-
+package model
 import data.model.Item
 import data.model.TaxLevel
 import data.model.generateCheckNumber
@@ -10,17 +10,20 @@ enum class IternalID(val value: String, val pricePerKilo: Double) {
     PEAR("2746", 8.99),
     TOMATO("0233", 3.99),
     CHICKEN("2542",9.99),
-    BAGETTE("4281", 1.99)
+    BAGETTE("4281", 1.99),
+    OTHER("0000", 1.00);
 }
+
+
+
 enum class FoodType(val value: String) {//department
 FRUIT("211"),
     VEGETABLE("233"),
     MEAT("242"),
-    BREAD("276")
+    BREAD("276"),
+    OTHER("000");
 }
 
-//ne podvajaj v InteralItem
-//ne sme bit v Item internal pa oni ID
 
 class InternalItem(
     val internalId: IternalID,

@@ -1,3 +1,5 @@
+package model
+
 interface Searchable {
     fun search(word: String): Boolean
 }

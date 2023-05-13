@@ -1,8 +1,8 @@
 package data.model
 
 
-import Searchable
-import data.util.BarcodeUtil
+import model.BarcodeUtil
+import model.Searchable
 import java.time.LocalDateTime
 import java.util.*
 

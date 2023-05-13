@@ -27,8 +27,7 @@ object DataBaseUtil{
     }
     @JvmStatic
     fun testConnection(){
-        println("test")
-        val query = "SELECT * FROM city"
+        val query = "SELECT * FROM item" //zamenjal city z item
         val file = File("src/jvmMain/kotlin/data/util/config.json")
         val dbCredentials = Json.decodeFromString<DbCredentials>(file.readText())
 
@@ -41,7 +40,7 @@ object DataBaseUtil{
                     val rs = select.executeQuery()
                     while (rs.next()) {
 
-                        val attribute = rs.getString("city")
+                        val attribute = rs.getString("name")//zamenjal city z name
                         println("$attribute")
                     }
                 } catch (ex: SQLException) {

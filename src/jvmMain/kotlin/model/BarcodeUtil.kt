@@ -1,4 +1,4 @@
-package data.util
+package model
 
 object BarcodeUtil {
 
