@@ -1,127 +1,110 @@
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.List
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import data.dao.mysql.MySqlCashier
-import data.dao.mysql.MySqlInternalItem
-import data.dao.mysql.MySqlItem
+import data.dao.mysql.*
 import data.model.Item
 import data.model.TaxLevel
-import model.Cashier
-import model.FoodType
-import model.InternalItem
-import model.IternalID
+import model.*
+import java.time.LocalDateTime
 import java.util.*
 
 //ERR model spremeni da ne bo skup v items item in internal item
 
 
-
-data class elements(val name: String, val icon: ImageVector)
-
-// variables
-val tabs = listOf(
-    elements(
-        "Invoices",
-        Icons.Rounded.List
-    ),
-    elements(
-        "About",
-        Icons.Rounded.Info
-    )
-)
-@Composable
-fun Invoices() {
-
-        Column(
-            modifier = Modifier.fillMaxWidth().padding(200.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                textAlign = TextAlign.Center,
-                text = "INVOICES CONTENT"
-            )
-        }
-    }
-
-
-@Composable
-fun AboutApp() {
-        Column(
-            modifier = Modifier.fillMaxWidth().padding(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                modifier = Modifier.padding(15.dp),
-                text = "About application",
-                style = MaterialTheme.typography.h4,
-                textAlign = TextAlign.Center
-            )
-            Text(
-                text = "Principles of programming languages\nAuthor: Matej Moravec",
-                textAlign = TextAlign.Center
-            )
-        }
-
-}
-
-@Composable
-fun Footer(index: Int) {
-    val currTab = tabs[index].name
-    Box(
-        contentAlignment = Alignment.BottomCenter,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.Cyan)
-        ) {
-            Text(
-                modifier = Modifier.fillMaxWidth().padding(12.dp),
-                text = "You are viewing the \"$currTab\" tab",
-                textAlign = TextAlign.Center
-            )
-        }
-    }
-}
-
-@Composable
-fun NavigationBar() {
-    var selectedTabIndex by remember { mutableStateOf(0) }
-    Column(modifier = Modifier.fillMaxWidth()) {
-        TabRow( //row
-            selectedTabIndex = selectedTabIndex,
-            backgroundColor = Color.Cyan
-        ) {
-            tabs.forEachIndexed { index, item ->
-                Tab(
-                    text = { Text(text = item.name) },
-                    selected = selectedTabIndex == index,
-                    icon = { Icon(item.icon, "") },
-                    onClick = {
-                        selectedTabIndex = index
-                    }
-                )
-            }
-        }
-        when (selectedTabIndex) {
-            0 -> Invoices()
-            1 -> AboutApp()
-        }
-        Footer(selectedTabIndex)
-    }
-}
+//
+//data class elements(val name: String, val icon: ImageVector)
+//
+//// variables
+//val tabs = listOf(
+//    elements(
+//        "Invoices",
+//        Icons.Rounded.List
+//    ),
+//    elements(
+//        "About",
+//        Icons.Rounded.Info
+//    )
+//)
+//@Composable
+//fun Invoices() {
+//
+//        Column(
+//            modifier = Modifier.fillMaxWidth().padding(200.dp),
+//            horizontalAlignment = Alignment.CenterHorizontally
+//        ) {
+//            Text(
+//                textAlign = TextAlign.Center,
+//                text = "INVOICES CONTENT"
+//            )
+//        }
+//    }
+//
+//
+//@Composable
+//fun AboutApp() {
+//        Column(
+//            modifier = Modifier.fillMaxWidth().padding(20.dp),
+//            horizontalAlignment = Alignment.CenterHorizontally
+//        ) {
+//            Text(
+//                modifier = Modifier.padding(15.dp),
+//                text = "About application",
+//                style = MaterialTheme.typography.h4,
+//                textAlign = TextAlign.Center
+//            )
+//            Text(
+//                text = "Principles of programming languages\nAuthor: Matej Moravec",
+//                textAlign = TextAlign.Center
+//            )
+//        }
+//
+//}
+//
+//@Composable
+//fun Footer(index: Int) {
+//    val currTab = tabs[index].name
+//    Box(
+//        contentAlignment = Alignment.BottomCenter,
+//        modifier = Modifier.fillMaxSize()
+//    ) {
+//        Column(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .background(Color.Cyan)
+//        ) {
+//            Text(
+//                modifier = Modifier.fillMaxWidth().padding(12.dp),
+//                text = "You are viewing the \"$currTab\" tab",
+//                textAlign = TextAlign.Center
+//            )
+//        }
+//    }
+//}
+//
+//@Composable
+//fun NavigationBar() {
+//    var selectedTabIndex by remember { mutableStateOf(0) }
+//    Column(modifier = Modifier.fillMaxWidth()) {
+//        TabRow( //row
+//            selectedTabIndex = selectedTabIndex,
+//            backgroundColor = Color.Cyan
+//        ) {
+//            tabs.forEachIndexed { index, item ->
+//                Tab(
+//                    text = { Text(text = item.name) },
+//                    selected = selectedTabIndex == index,
+//                    icon = { Icon(item.icon, "") },
+//                    onClick = {
+//                        selectedTabIndex = index
+//                    }
+//                )
+//            }
+//        }
+//        when (selectedTabIndex) {
+//            0 -> Invoices()
+//            1 -> AboutApp()
+//        }
+//        Footer(selectedTabIndex)
+//    }
+//}
 
 fun main() {
 //    androidx.compose.ui.window.singleWindowApplication(
@@ -175,6 +158,7 @@ fun main() {
     println(if (itemToDelete != null && mySqlItem.delete(itemToDelete)) "The item was deleted successfully." else "Failed to delete the item.")
 
     //for Cashier
+    println("Cashier__________________________")
     val mySqlCashier = MySqlCashier()
 
     val newCashier = Cashier(
@@ -231,70 +215,69 @@ fun main() {
     } else {
         println("No cashier found with name: ${cashierToDelete?.name}")
     }
-    //_______________Company
-    println("Company__________________________")
-//    val mySqlCompanyDao = MySqlCompany()
-//
-//    val newCompany = Company("Mercator", "123 X St.", "12345", "contact@companyx.com", "1234567890", "91820", "www.companyx.com", true)
-//    val insertSuccess = mySqlCompanyDao.insert(newCompany)
-//
-//    if (insertSuccess) {
-//        println("Company inserted successfully.")
-//    } else {
-//        println("Failed to insert company.")
-//        return
-//    }
-//
-//    val companyFromDb = mySqlCompanyDao.getByName("Mercator")
-//
-//    if (companyFromDb != null) {
-//        println("Retrieved company from database.")
-//        println("Company name: ${companyFromDb.name}")
-//        println("Company address: ${companyFromDb.address}")
-//        // ...
-//    } else {
-//        println("Failed to retrieve company from database.")
-//        return
-//    }
-//
-//    // Update the company
-//    companyFromDb.email = "newemail@companyx.com"
-//    val updateSuccess = mySqlCompanyDao.update(companyFromDb)
-//
-//    if (updateSuccess) {
-//        println("Company updated successfully.")
-//    } else {
-//        println("Failed to update company.")
-//        return
-//    }
-//
-//    // Get all companies
-//    val allCompanies = mySqlCompanyDao.getAll()
-//    if (allCompanies.isNotEmpty()) {
-//        println("Retrieved all companies from database.")
-//        allCompanies.forEach { company ->
-//            println("Company name: ${company.name}")
-//        }
-//    } else {
-//        println("No companies found in the database.")
-//    }
-//
-//    // Delete the company
-//    val deleteSuccess = mySqlCompanyDao.delete(companyFromDb)
-//    if (deleteSuccess) {
-//        println("Company deleted successfully.")
-//    } else {
-//        println("Failed to delete company.")
-//    }
 
-    //_______________________Internal item
+    println("Company__________________________")
+    val mySqlCompanyDao = MySqlCompany()
+
+    val newCompany = Company("Mercator", "123 X St.", "12345", "contact@companyx.com", "1234567890", "91820", "www.companyx.com", true)
+    val insertSuccess = mySqlCompanyDao.insert(newCompany)
+
+    if (insertSuccess) {
+        println("Company inserted successfully.")
+    } else {
+        println("Failed to insert company.")
+        return
+    }
+
+    val companyFromDb = mySqlCompanyDao.getByName("Mercator")
+
+    if (companyFromDb != null) {
+        println("Retrieved company from database.")
+        println("Company name: ${companyFromDb.name}")
+        println("Company address: ${companyFromDb.address}")
+        // ...
+    } else {
+        println("Failed to retrieve company from database.")
+        return
+    }
+
+    // Update the company
+    companyFromDb.email = "newemail@companyx.com"
+    val updateSuccess = mySqlCompanyDao.update(companyFromDb)
+
+    if (updateSuccess) {
+        println("Company updated successfully.")
+    } else {
+        println("Failed to update company.")
+        return
+    }
+
+    // Get all companies
+    val allCompanies = mySqlCompanyDao.getAll()
+    if (allCompanies.isNotEmpty()) {
+        println("Retrieved all companies from database.")
+        allCompanies.forEach { company ->
+            println("Company name: ${company.name}")
+        }
+    } else {
+        println("No companies found in the database.")
+    }
+
+    // Delete the company
+    val deleteSuccess = mySqlCompanyDao.delete(companyFromDb)
+    if (deleteSuccess) {
+        println("Company deleted successfully.")
+    } else {
+        println("Failed to delete company.")
+    }
+
     println("InternalItem__________________________")
 
         val mySqlInternalItemDao = MySqlInternalItem()
 
         // Create a new InternalItem
         val internalItem = InternalItem(
-            internalId = IternalID.CHICKEN,
+            internalId = IternalID.OTHER,
             department = FoodType.MEAT,
             name = "Nuggets",
             taxLevel = TaxLevel.A,
@@ -318,8 +301,49 @@ fun main() {
         println("InternalItem fetched by name: ${itemByName?.name}")
 
 
+    println("INVOICE__________________________________________")
 
 
+    val item1 = Item(
+        name = "pasteta",
+        taxLevel = TaxLevel.A,
+        price = 99.99,
+        internCode = "IC123",
+        itemId = "5",
+        weight = 1.0,
+        checkNumber = "1",
+        code = "1234567891231"
+    )
+    val item2 = Item(
+        name= "Orange",
+        taxLevel = TaxLevel.B,
+        price = 99.99,
+        internCode = "IC123",
+        itemId = "6",
+        weight = 1.0,
+        checkNumber = "1",
+        code = "1234567891231"
+    )
+
+    val items = LinkedHashMap<Item, Int>()
+    items[item1] = 5
+    items[item2] = 3
+
+
+    val company = Company("Example Company", "123 Example St", "tax123", "example@company.com", "1234567890", "reg123", "www.example.com", true)
+    val cashier1 = Cashier("John", "Doe")
+
+    val invoice = Invoice(LocalDateTime.now(), items, company, cashier1, company)
+
+    val invoiceDao = MySqlInvoice()
+
+    val wasInserted1 = invoiceDao.insert(invoice)
+
+    if (wasInserted1) {
+        println("Invoice was successfully inserted.")
+    } else {
+        println("Failed to insert the invoice.")
+    }
     }
 
 

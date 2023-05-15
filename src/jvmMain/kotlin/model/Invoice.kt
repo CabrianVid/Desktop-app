@@ -11,20 +11,20 @@ class Invoice(
     private var date: LocalDateTime,
     private var items: LinkedHashMap<Item, Int>,
 
-    private var issuer: Company,
-    private var cashier: Cashier,
-    private var customer: Company? = null, //pomeni da je lahko null in takrat ni firme
-    private var id: UUID = UUID.randomUUID(),
-    private var code: UUID = UUID.randomUUID(),
-    private var finalPrice: Double = items.getTotalPrice(),
-    private var netoPrice: Double = finalPrice - items.getTax(),
+    private var issuer: Company?= null,
+    var cashier: Cashier?,
+    var customer: Company? = null, //pomeni da je lahko null in takrat ni firme
+    var id: UUID = UUID.randomUUID(),
+    var code: UUID = UUID.randomUUID(),
+    var finalPrice: Double = items.getTotalPrice(),
+    var netoPrice: Double = finalPrice - items.getTax(),
 
     val created: LocalDateTime = LocalDateTime.now(),
     var modified: LocalDateTime = LocalDateTime.now()
 ) : Searchable {
     override fun search(word: String): Boolean {
         return date.toString().contains(word, true) || items.toString()
-            .contains(word, true) || issuer.search(word) || cashier.search(word) || id.toString()
+            .contains(word, true) || issuer!!.search(word) || cashier!!.search(word) || id.toString()
             .contains(word, true) || code.toString().contains(word, true) || finalPrice.toString()
             .contains(word, true) || netoPrice.toString().contains(word, true) || created.toString()
             .contains(word, true) || modified.toString().contains(word, true)
@@ -55,13 +55,13 @@ class Invoice(
     //izpis
     fun print() {
         println("Invoice #${id} - ${date}")
-        println("Issuer name: ${issuer.name}")
-        println("Issuer address: ${issuer.address}")
-        println("Issuer bank account: ${issuer.taxNumber}")
-        println("Issuer email: ${issuer.email}")
-        println("Issuer phone: ${issuer.phone}")
-        println("Issuer tax number: ${issuer.registrationNumber}")
-        println("Issuer website: ${issuer.website}")
+        println("Issuer name: ${issuer!!.name}")
+        println("Issuer address: ${issuer!!.address}")
+        println("Issuer bank account: ${issuer!!.taxNumber}")
+        println("Issuer email: ${issuer!!.email}")
+        println("Issuer phone: ${issuer!!.phone}")
+        println("Issuer tax number: ${issuer!!.registrationNumber}")
+        println("Issuer website: ${issuer!!.website}")
         if (customer != null) {
             println("Customer name: ${customer?.name}")
             println("Customer tax number: ${customer?.taxNumber}")
@@ -103,9 +103,9 @@ class Invoice(
         println("Neto price: ${String.format("%.2f", netoPrice)}")
 
 
-        println("model.Cashier name: ${cashier.name}")
-        println("model.Cashier surname: ${cashier.surname}")
-        println("model.Cashier email: ${cashier.idNumber}")
+        println("model.Cashier name: ${cashier!!.name}")
+        println("model.Cashier surname: ${cashier!!.surname}")
+        println("model.Cashier email: ${cashier!!.idNumber}")
 
         println("Invoice code: ${code}")
 

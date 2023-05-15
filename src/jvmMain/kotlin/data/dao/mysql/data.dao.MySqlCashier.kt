@@ -17,6 +17,24 @@ data class DbCredentials(val url: String, val username: String, val password: St
 
 class MySqlCashier : CashierDao {
     override fun getById(id: UUID): Cashier? {
+        val file = File("src/jvmMain/kotlin/data/util/config.json")
+        val dbCredentials = Json.decodeFromString<DbCredentials>(file.readText())
+        val conn = DataBaseUtil.getConnection(dbCredentials) ?: return null
+        conn.use {
+            try {
+                val select = it.prepareStatement("SELECT * FROM cashier WHERE id = ? LIMIT 1")
+                select.setString(1, id.toString())
+                val rs = select.executeQuery()
+                if (!rs.first()) return null
+                return mapDataToObject(rs)
+            } catch (ex: SQLException) {
+                println(ex.message)
+            }
+        }
+        return null
+    }
+
+    override fun getByIdNumber(id: String): Cashier? {
         TODO("Not yet implemented")
     }
 
@@ -28,23 +46,23 @@ class MySqlCashier : CashierDao {
         return Cashier(name, surname, idNumber)
     }
 
-    override fun getByIdNumber(id: String): Cashier? {
-        val file = File("src/jvmMain/kotlin/data/util/config.json")
-        val dbCredentials = Json.decodeFromString<DbCredentials>(file.readText())
-        val conn = DataBaseUtil.getConnection(dbCredentials) ?: return null
-        conn.use {
-            try {
-                val select = it.prepareStatement("SELECT * FROM cashier WHERE id = ? LIMIT 1")
-                select.setString(1, id)
-                val rs = select.executeQuery()
-                if (!rs.first()) return null
-                return mapDataToObject(rs)
-            } catch (ex: SQLException) {
-                println(ex.message)
-            }
-        }
-        return null
-    }
+//    override fun getByIdNumber(id: String): Cashier? {
+//        val file = File("src/jvmMain/kotlin/data/util/config.json")
+//        val dbCredentials = Json.decodeFromString<DbCredentials>(file.readText())
+//        val conn = DataBaseUtil.getConnection(dbCredentials) ?: return null
+//        conn.use {
+//            try {
+//                val select = it.prepareStatement("SELECT * FROM cashier WHERE id = ? LIMIT 1")
+//                select.setString(1, id)
+//                val rs = select.executeQuery()
+//                if (!rs.first()) return null
+//                return mapDataToObject(rs)
+//            } catch (ex: SQLException) {
+//                println(ex.message)
+//            }
+//        }
+//        return null
+//    }
 
     override fun getByName(name: String): Cashier? {
         val file = File("src/jvmMain/kotlin/data/util/config.json")

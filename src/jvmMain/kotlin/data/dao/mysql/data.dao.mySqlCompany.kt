@@ -26,7 +26,8 @@ class MySqlCompany : CompanyDao {
         return Company(name, address, taxNumber, email, phone, registrationNumber, website, taxpayer)
     }
     override fun getById(id: UUID): Company? {
-        TODO("Not yet implemented")
+        return getCompany("SELECT * FROM company WHERE id = ? LIMIT 1", id.toString())
+
     }
 
     override fun getByName(name: String): Company? {
