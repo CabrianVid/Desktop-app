@@ -1,16 +1,20 @@
 
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.List
+import androidx.compose.material.icons.rounded.ShoppingCart
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
@@ -36,25 +40,47 @@ val tabs = listOf(
         Icons.Rounded.Info
     )
 )
+
+
 @Composable
 fun Items() {
     val items: List<Item> by remember { mutableStateOf(MySqlItem().getAll()) }
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         itemsIndexed(items) { index, item ->
-            Text(text = "${item.name}, ${item.price}€")
+            Card(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+                    .height(80.dp), // Set a specific height
+                shape = RoundedCornerShape(8.dp),
+                border = BorderStroke(1.dp, Color.White),
+                elevation = 4.dp
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.ShoppingCart,
+                        contentDescription = "Shopping Cart",
+                        modifier = Modifier.scale(1.5f)
+                            .size(50.dp)
+                            .padding(10.dp)
+                    )
+                    Text(
+                        text = item.name,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Text(
+                        text = "${item.price}€",
+                        textAlign = TextAlign.End
+                    )
+                }
+            }
         }
     }
-//
-//        Column(
-//            modifier = Modifier.fillMaxWidth().padding(200.dp),
-//            horizontalAlignment = Alignment.CenterHorizontally
-//        ) {
-//            Text(
-//                textAlign = TextAlign.Center,
-//                text = "ITEM CONTENT"
-//            )
-//        }
-    }
+}
 
 
 @Composable
@@ -101,29 +127,36 @@ fun Footer(index: Int) {
 @Composable
 fun NavigationBar() {
     var selectedTabIndex by remember { mutableStateOf(0) }
-    Column(modifier = Modifier.fillMaxWidth()) {
-        TabRow( //row
-            selectedTabIndex = selectedTabIndex,
-            backgroundColor = Color.Cyan
-        ) {
-            tabs.forEachIndexed { index, item ->
-                Tab(
-                    text = { Text(text = item.name) },
-                    selected = selectedTabIndex == index,
-                    icon = { Icon(item.icon, "") },
-                    onClick = {
-                        selectedTabIndex = index
-                    }
-                )
+    Scaffold(//column zamenjal s scaffold ker drugace ni delal footer
+        topBar = {
+            TabRow( //row
+                selectedTabIndex = selectedTabIndex,
+                backgroundColor = Color.Cyan
+            ) {
+                tabs.forEachIndexed { index, item ->
+                    Tab(
+                        text = { Text(text = item.name) },
+                        selected = selectedTabIndex == index,
+                        icon = { Icon(item.icon, "") },
+                        onClick = {
+                            selectedTabIndex = index
+                        }
+                    )
+                }
             }
+        },
+        content = {
+            when (selectedTabIndex) {
+                0 -> Items()
+                1 -> AboutApp()
+            }
+        },
+        bottomBar = {
+            Footer(selectedTabIndex)
         }
-        when (selectedTabIndex) {
-            0 -> Items()
-            1 -> AboutApp()
-        }
-        Footer(selectedTabIndex)
-    }
+    )
 }
+
 
 fun main() {
 
